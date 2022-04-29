@@ -1,38 +1,30 @@
-.App {
-  text-align: center;
-}
+@import "./additional/flexboxgrid.scss";
+@import "./src/additional/reset.scss";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap');
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.task {
+  margin-left: 20px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.line__through {
+  text-decoration: line-through;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.hidden {
+  display: none;
+}
+.red {
+  background-color: red;
+}
+.yellow {
+  background-color: yellow;
+}
+.green {
+  background-color: green;
+}
+.task__div {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex-direction: row;
 }
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.colors {
+width: 100%;
+max-width: 40px;
 }
