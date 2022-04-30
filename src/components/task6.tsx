@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import './Task.scss';
 
 type TasksListsDetails = {
   title:string,
@@ -18,7 +17,6 @@ const Task6 = () => {
   const [allTasksLists, setAllTasksLists] = useState([...tasksLists]);
   const [isEditing, setIsEditing] = useState(false);
   const [editInputValue, setEditInputValue] = useState('');
-  // const [currentTask, setCurrentTask] = useState({});
 
   const completed = (index: number) => {
     const newTasksLists = [...allTasksLists];
@@ -89,48 +87,90 @@ const Task6 = () => {
     return edited;
   };
 
+  const sortedHigh = () => {
+    const newTasksLists = [...allTasksLists];
+    const highArr = newTasksLists.filter((el) => el.high === true && el.medium === false);
+    const medArr = newTasksLists.filter((el) => el.medium === true && el.high === false);
+    const lowArr = newTasksLists.filter((el) => el.low);
+    const sortedTasks = [...highArr, ...medArr, ...lowArr];
+
+    return setTasksLists(sortedTasks);
+  };
+
+  const sortedLow = () => {
+    const newTasksLists = [...allTasksLists];
+    const highArr = newTasksLists.filter((el) => el.high === true && el.medium === false);
+    const medArr = newTasksLists.filter((el) => el.medium === true && el.high === false);
+    const lowArr = newTasksLists.filter((el) => el.low);
+    const sortedTasks = [...lowArr, ...medArr, ...highArr];
+    return setTasksLists(sortedTasks);
+  };
+
   return (
     <div className="container">
       <div>
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(event) => setInputValue(event.target.value)}
-          placeholder="write your task here"
-        />
-        <button
-          className="plannerbtn"
-          onClick={() => {
-            setTasksLists([...tasksLists, {
-              title: inputValue,
-              isDone: false,
-              isProgress: true,
-              high: false,
-              medium: false,
-              low: false,
-              edit: false,
-            }]);
-            setAllTasksLists([...tasksLists, {
-              title: inputValue,
-              isDone: false,
-              isProgress: true,
-              high: false,
-              medium: false,
-              low: false,
-              edit: false,
-            }]);
-            setInputValue('');
-          }}
-        >
-          Add
-        </button>
+        <div className="planner">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(event) => setInputValue(event.target.value)}
+            placeholder="write your task here"
+          />
+          <div className="priority__select">
+            Priority
+            <select onChange={(event) => {
+              if (event.target.value === 'High') {
+                sortedHigh();
+              }
+              if (event.target.value === 'Low') {
+                sortedLow();
+              }
+            }}
+            >
+              <option value="High">High</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <button
+            className="plannerbtn"
+            onClick={() => {
+              setTasksLists([...tasksLists, {
+                title: inputValue,
+                isDone: false,
+                isProgress: true,
+                high: false,
+                medium: false,
+                low: false,
+                edit: false,
+              }]);
+              setAllTasksLists([...tasksLists, {
+                title: inputValue,
+                isDone: false,
+                isProgress: true,
+                high: false,
+                medium: false,
+                low: false,
+                edit: false,
+              }]);
+              setInputValue('');
+            }}
+          >
+            Add
+          </button>
+        </div>
+      </div>
+      <div className="progress__bar">
+        {tasksLists.map((taskList) => (taskList.isDone
+          ? <div style={{ order: '1' }} className="progress__done" />
+          : <div className="progress__none" />))}
       </div>
       <div>
         <ul>
           {tasksLists.map((el, index) => (
             isEditing ? (
-              <div key={el.title}>
+              <div className="tasks">
                 <input
+                  className="edit__input"
                   type="text"
                   placeholder="edit task"
                   value={editInputValue}
@@ -148,43 +188,54 @@ const Task6 = () => {
             ) : (
               <div
                 onClick={() => setTasksLists(Priority(index))}
-                className={`task__div ${el.isDone && 'line__through'}
+                className={`task__div
               ${el.high && 'red'}
               ${el.medium && 'yellow'}
               ${el.low && 'green'}
               `}
                 key={Math.random()}
               >
-                <input
-                  type="checkbox"
-                  checked={el.isDone}
-                  onChange={() => setTasksLists(completed(index))}
-                  onClick={(e) => { e.stopPropagation(); }}
-                />
-                {el.title}
+                <div>
+                  <input
+                    className="checkbox"
+                    type="checkbox"
+                    checked={el.isDone}
+                    onChange={() => setTasksLists(completed(index))}
+                    onClick={(e) => { e.stopPropagation(); }}
+                  />
+                  <span
+                    className="task__entry"
+                    style={{ textDecoration: el.isDone ? 'line-through' : 'none' }}
+                  >
+                    {el.title}
+
+                  </span>
+                </div>
                 <div />
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    (setIsEditing(!isEditing));
-                    setEditInputValue('');
-                  }}
-                  className="edit__button"
-                >
-                  E
+                <div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      (setIsEditing(!isEditing));
+                      setEditInputValue('');
+                    }}
+                    className="edit__button"
+                  >
+                    Edit
 
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setTasksLists(tasksLists.filter((_, i) => i !== index));
-                    setAllTasksLists(allTasksLists.filter((_, i) => i !== index));
-                  }}
-                  className="close__button"
-                >
-                  X
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setTasksLists(tasksLists.filter((_, i) => i !== index));
+                      setAllTasksLists(allTasksLists.filter((_, i) => i !== index));
+                    }}
+                    className="close__button"
+                  >
+                    Close
 
-                </button>
+                  </button>
+                </div>
               </div>
             )
           ))}

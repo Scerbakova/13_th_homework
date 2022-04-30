@@ -2,14 +2,49 @@
 @import "./src/additional/reset.scss";
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap');
 
-.task {
-  margin-left: 20px;
+.container {
+  font-family: "Roboto", sans-serif;
+  font-size: 30px;
+  color: rgb(39, 49, 49);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  margin: 40px auto;
+  background-color: antiquewhite;
+  padding: 20px;
+  border: 2px solid brown;
+  border-radius: 20px;
+  box-shadow: 0 10px 10px rgb(92, 85, 85);
 }
-.line__through {
-  text-decoration: line-through;
+input {
+  border: none;
+  background-color: antiquewhite;
+  border-bottom: 2px solid rgb(17, 16, 15);
+  margin-bottom: 20px;
 }
-.hidden {
-  display: none;
+.checkbox {
+  accent-color: #9d3039;
+  height: 30px;
+  width: 30px;
+  margin-right: 20px;
+}
+.task__entry {
+  margin-right: 20px;
+}
+button {
+  color: inherit;
+  border: none;
+  background-color: rgb(209, 184, 101);
+  border-radius: 4px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+.priority__btn:first-child {
+  background-color: rgb(209, 117, 101);
+}
+.priority__btn:last-child {
+  background-color: rgb(101, 209, 101);
 }
 .red {
   background-color: red;
@@ -21,10 +56,37 @@
   background-color: green;
 }
 .task__div {
+  width: 100%;
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
 }
 .colors {
 width: 100%;
 max-width: 40px;
+}
+.progress__bar {
+  display: inline-flex;
+  flex-direction: row;
+  width: 100%;
+  height: 20px;
+  border: 1px solid brown;
+  border-radius: 4px;
+}
+.progress__done {
+  width: 20px;
+  background-color: rgb(98, 179, 141);
+}
+.progress__none {
+  width: 20px;
+  background-color: rgb(179, 98, 145);
+}
+.planner {
+  width: 100%;
+  display: flex;
+  column-gap: 20px;
+}
+.priority__select {
+  display: flex;
+  flex-direction: column;
 }
