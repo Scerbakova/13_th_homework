@@ -8,6 +8,7 @@ type TasksListsDetails = {
   high: boolean,
   medium: boolean,
   low: boolean,
+  edit: boolean,
 }
 
 const Task6 = () => {
@@ -15,8 +16,11 @@ const Task6 = () => {
   const [tasksLists, setTasksLists] = useState<TasksListsDetails[]>([
   ]);
   const [allTasksLists, setAllTasksLists] = useState([...tasksLists]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editInputValue, setEditInputValue] = useState('');
+  // const [currentTask, setCurrentTask] = useState({});
 
-  const completed = (index:number) => {
+  const completed = (index: number) => {
     const newTasksLists = [...allTasksLists];
     newTasksLists[index].isDone = !newTasksLists[index].isDone;
     return newTasksLists;
@@ -78,6 +82,13 @@ const Task6 = () => {
   },
   ];
 
+  const edit = (index:number) => {
+    const edited = [...tasksLists];
+    edited[index].edit = false;
+    edited[index].title = editInputValue;
+    return edited;
+  };
+
   return (
     <div className="container">
       <div>
@@ -97,6 +108,7 @@ const Task6 = () => {
               high: false,
               medium: false,
               low: false,
+              edit: false,
             }]);
             setAllTasksLists([...tasksLists, {
               title: inputValue,
@@ -105,6 +117,7 @@ const Task6 = () => {
               high: false,
               medium: false,
               low: false,
+              edit: false,
             }]);
             setInputValue('');
           }}
@@ -115,30 +128,65 @@ const Task6 = () => {
       <div>
         <ul>
           {tasksLists.map((el, index) => (
-            <div
-              onClick={() => setTasksLists(Priority(index))}
-              className={`task__div ${el.isDone && 'line__through'}
+            isEditing ? (
+              <div key={el.title}>
+                <input
+                  type="text"
+                  placeholder="edit task"
+                  value={editInputValue}
+                  onChange={(event) => setEditInputValue(event.target.value)}
+                />
+                <button onClick={() => {
+                  setTasksLists(edit(index));
+                  setIsEditing(false);
+                }}
+                >
+                  Save
+                </button>
+                <button onClick={() => { setIsEditing(false); }}>Cancel</button>
+              </div>
+            ) : (
+              <div
+                onClick={() => setTasksLists(Priority(index))}
+                className={`task__div ${el.isDone && 'line__through'}
               ${el.high && 'red'}
               ${el.medium && 'yellow'}
               ${el.low && 'green'}
               `}
-              key={Math.random()}
-            >
-              <input
-                type="checkbox"
-                checked={el.isDone}
-                onChange={() => setTasksLists(completed(index))}
-              />
-              {el.title}
-              <div />
-              <button
-                onClick={() => setTasksLists(tasksLists.filter((_, i) => i !== index))}
-                className="x__button"
+                key={Math.random()}
               >
-                X
+                <input
+                  type="checkbox"
+                  checked={el.isDone}
+                  onChange={() => setTasksLists(completed(index))}
+                  onClick={(e) => { e.stopPropagation(); }}
+                />
+                {el.title}
+                <div />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    (setIsEditing(!isEditing));
+                    setEditInputValue('');
+                  }}
+                  className="edit__button"
+                >
+                  E
 
-              </button>
-            </div>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setTasksLists(tasksLists.filter((_, i) => i !== index));
+                    setAllTasksLists(allTasksLists.filter((_, i) => i !== index));
+                  }}
+                  className="close__button"
+                >
+                  X
+
+                </button>
+              </div>
+            )
           ))}
         </ul>
         <div>
